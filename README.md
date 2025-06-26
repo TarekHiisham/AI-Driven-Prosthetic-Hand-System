@@ -1,94 +1,68 @@
-# AI-Driven-Prosthetic-Hand-System
-An integrated system that leverages AI and real-time communication to control a prosthetic hand using muscle signals (EMG) and Machine learning. The system is composed of multiple interconnected modules built with Python, Blender, and communication protocols using socket programming.
+# AI-Driven Prosthetic Hand System
 
-**Project Structure and Components**
-1. AI Model Pipeline
-Purpose: Predict joint angles of fingers based on muscle signal input (EMG features).
+An AI-powered prosthetic hand that predicts finger joint angles using EMG signals. The system integrates machine learning with real-time 3D simulation using Blender and supports live control through a socket-based communication layer.
 
-Tech: Trained using XGBoost, with feature engineering and fine-tuning.
+---
 
-Inputs: 8-channel EMG signals.
+## Project Overview
 
-Outputs: 14 predicted joint angles.
+This project represents an end-to-end pipeline for:
+- Training an ML model to predict joint angles from EMG features.
+- Sending real-time predictions to Blender for 3D animation.
+- Supporting a feedback loop and online fine-tuning.
 
-Features:
+---
 
-Model saving/loading.
+## Project Structure
 
-Fine-tuning on user-specific data.
+```text
+├── datasets/
+│   ├── deploy_data.csv           # Processed test data for deployment
+│   ├── new_sub.csv               # Dataset used for incremental learning
+│   └── X_test.csv                # Optional input test features
+├── models/
+│   ├── Pretrained_xgbmodel.json  # Base model
+│   └── finetuned_model.json      # finetuned model to desired generated data
+├── libs/
+│   ├── communicationlayer.py     # Socket server/client classes
+│   └── modelpipeline.py          # ML pipeline: predict, train, save
+├── client.py                     # Blender Python script for real-time animation                 
+├── app.py                        # Main GUI application using Tkinter
+└── README.md
+```
+---
+## Prerequisites
+Before running the project, ensure the following Python packages are installed:
+```bash
+pip install xgboost pandas numpy
+```
+---
+## How to run the project
 
-Performance metrics: RMSE, R², correlation.
+1. Launch the Server Application
+- Open a terminal or Git Bash window.
 
-2. Communication Layer (Server/Client)
-Purpose: Real-time data exchange between the AI system and Blender visualization or an embedded device.
+Run the main application:
+```bash
+python app.py
+```
+- Wait for the loading screen to initialize the AI model completely.
 
-Protocol: TCP socket communication.
+- Once loaded, the main GUI window will appear.
 
-Features:
+2. Open the Blender File
+- Launch Blender.
 
-Threaded client/server architecture.
+- Open the provided file: ```simulation.blend```.
 
-ACK-based flow control.
+3. Run the Blender Client Script
+- Inside Blender, go to the Text Editor.
 
-Event-driven message synchronization.
+- Open the script file (typically named client.py and communicationlayer.py).
 
-Queued data streaming.
+- Press Run Script.
 
-3. Blender Hand Visualization
-Purpose: Real-time simulation of hand motion based on AI predictions.
+4. Start the Prediction Stream
+- Go back to the application GUI window.
 
-Tech: Blender scripting with Python and bpy API.
-
-Features:
-
-Armature-based bone rotation.
-
-Smooth animation using keyframes.
-
-Modular client for socket integration.
-
-Uses a queue to synchronize with the server.
-
-4. Desktop Application (GUI)
-Purpose: Central user interface for running and controlling the system.
-
-Tech: Tkinter for GUI.
-
-Features:
-
-Model inference and training control.
-
-Progress feedback and status logging.
-
-Splash screen with loading bar.
-
-Seamless backend integration with server and AI model.
-
-5. Data Management
-Files:
-
-deploy_data.csv: Real test data for inference.
-
-new_sub.csv: Fine-tuning dataset.
-
-finetuned_model.json: Serialized model.
-
-Operations:
-
-Data preprocessing.
-
-Feature selection.
-
-Label scaling and thresholding.
-
-**How to run the system:**
-
-First, you need to install (XGBoost, socket, tkinter, pandas, numpy, threading, queue) modules.
-
-1- Run "app.py" using Python interpreter and wait until fully load the model.
-
-2- Open "simulation.blend" (ensure you installed the Blender software)
-
-3- Run the Python script opened in the file typically (client.py) inside Blender
-
-4- Press the "Running" button in the app GUI.
+- Click the “Running” button to start sending predictions to Blender.
