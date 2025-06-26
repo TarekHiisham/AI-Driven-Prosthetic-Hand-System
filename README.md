@@ -81,7 +81,8 @@ Feature selection.
 
 Label scaling and thresholding.
 
-How to run the system:
+**How to run the system:**
+
 First, you need to install (XGBoost, socket, tkinter, pandas, numpy, threading, queue) modules.
 
 1- Run "app.py" using Python interpreter and wait until fully load the model.
