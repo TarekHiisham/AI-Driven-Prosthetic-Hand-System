@@ -83,7 +83,11 @@ Label scaling and thresholding.
 
 How to run the system:
 First, you need to install (XGBoost, socket) modules.
+
 1- Run "app.py" using Python interpreter and wait until fully load the model.
+
 2- Open "simulation.blend" (ensure you installed the Blender software)
+
 3- Run the Python script opened in the file typically (client.py) inside Blender
+
 4- Press the "Running" button in the app GUI.
