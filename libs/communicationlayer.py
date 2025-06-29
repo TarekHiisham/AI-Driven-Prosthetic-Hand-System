@@ -3,6 +3,8 @@ from threading import Thread
 import threading
 import json
 
+connection_ips= []
+
 class ServerSocket:
     def __init__(self, server_queue, host=socket.gethostbyname(socket.gethostname()) , port=64219):
         self.host = host
@@ -24,6 +26,7 @@ class ServerSocket:
         while True:
             client_socket, addr = self.server_socket.accept()
             print(f"Connection from {addr}")
+            connection_ips.append(addr)
             Thread(target=self.handle_client, args=(client_socket,)).start()
 
     def handle_client(self, client_socket):

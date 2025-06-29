@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import threading
 import pandas as pd
+import matplotlib.pyplot as plt
+from libs import communicationlayer
 from libs.modelpipeline import PredictionPipeline
 from libs.communicationlayer import ServerSocket
 from queue import Queue
@@ -11,7 +13,7 @@ MODEL_PATH = "models/finetuned_model.json"
 TEST_PATH = "datasets/deploy_data.csv"
 SUB_PATH = "datasets/new_sub.csv"
 TXSPEED = 1           # 1 second  
-
+conncetions_ips = communicationlayer.connection_ips  # List to store connection IPs
 
 loading = True
 
@@ -24,6 +26,9 @@ X_test = pd.read_csv(TEST_PATH).iloc[:, :8]  # Assuming first 8 columns are feat
 sub_df = pd.read_csv(SUB_PATH)
 X_sub = sub_df.iloc[:, :8]
 y_sub = sub_df.iloc[:, 8:]
+
+# for better look for the GUI
+plt.tight_layout()
 
 def animate_loading():
     while loading:
@@ -137,8 +142,24 @@ def main_app():
     prediction_label = tk.Label(frame, text="Finger Angles", font=("Arial", 12), fg="blue")
     prediction_label.pack(pady=10)
     
-    learning_status_label = tk.Label(frame, text="Training status: Idle", font=("Arial", 12), fg="black")
+        # Label for connections
+    if conncetions_ips:
+        label_text = f"connections: {conncetions_ips[-1]}"
+    else:
+        label_text = "connections: None"
+
+    learning_status_label = tk.Label(frame, text=label_text, font=("Arial", 12), fg="red")
     learning_status_label.pack(pady=10)
+
+    # Periodic label update
+    def update_connection_label():
+        if conncetions_ips:
+            learning_status_label.config(text=f"connections: {conncetions_ips[-1]}")
+        else:
+            learning_status_label.config(text="connections: None")
+        root.after(1000, update_connection_label)  # Schedule again
+
+    update_connection_label()  # Start the loop
 
     root.mainloop()
 
